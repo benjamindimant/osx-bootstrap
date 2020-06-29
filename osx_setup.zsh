@@ -59,7 +59,8 @@ brew cask install ${CASKS[@]}
 
 echo "Set up vim..."
 if ! [ -s ~/.vimrc ]; then
-    curl -fsSL https://raw.githubusercontent.com/benjamindimant/vim-config/master/vimrc-vanilla >> ~/.vimrc
+    curl -fsSL
+    https://raw.githubusercontent.com/benjamindimant/osx-bootstrap/master/.vimrc >> ~/.vimrc
 fi
 
 echo "Installing pyenv..."
