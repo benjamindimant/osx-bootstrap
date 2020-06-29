@@ -35,16 +35,7 @@ if ! [ -x "$(command -v git)" ]; then
     brew install git
 fi
 
-echo "Installing cask apps..."
-CASKS=(
-    dropbox
-    firefox
-    google-chrome
-    macvim
-)
-brew cask install ${CASKS[@]}
-
-echo "Creating .zshrc"
+echo "Creating .zshrc with git configs"
 if [ ! -s ~/.zshrc ]; then
     curl -fsSL https://raw.githubusercontent.com/benjamindimant/osx-terminal-config/master/.zshrc >> ~/.zshrc
     echo "\n# git" >> ~/.zshrc
@@ -54,28 +45,44 @@ if [ ! -s ~/.zshrc ]; then
     echo "setopt nomenucomplete" >> ~/.zshrc
 fi
 
-echo "Set up pyenv"
+echo "Installing cask apps..."
+CASKS=(
+    dropbox
+    firefox
+    google-chrome
+    macvim
+    mactex
+    texmaker
+    github
+)
+brew cask install ${CASKS[@]}
+
+echo "Set up vim..."
+if ! [ -s ~/.vimrc ]; then
+    curl -fsSL https://raw.githubusercontent.com/benjamindimant/vim-config/master/vimrc-vanilla >> ~/.vimrc
+fi
+
+echo "Installing pyenv..."
 if ! [ -x "$(command -v pyenv)" ]; then
     brew install pyenv
     echo "\n# pyenv" >> ~/.zshrc
     echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.zshrc
 fi
 
-echo "Set up nvm"
+echo "Installing nvm..."
 if [ ! -d ~/.nvm ]; then
     (
         git clone https://github.com/nvm-sh/nvm.git ~/.nvm
         git --git-dir ~/.nvm/.git checkout `git --git-dir ~/.nvm/.git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1)`
     )
     echo "\n# nvm" >> ~/.zshrc
-fi
-echo "export NVM_DIR=\"\$HOME/.nvm\"" >> ~/.zshrc
+    echo "export NVM_DIR=\"\$HOME/.nvm\"" >> ~/.zshrc
     echo "[ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"  # This loads nvm" >> ~/.zshrc
     echo "[ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"  # This loads nvm bash_completion" >> ~/.zshrc
+fi
 
 echo "Creating folder structure..."
 [[ ! -d ~/Code ]] && mkdir ~/Code
-
 
 echo "Cleaning up..."
 brew cleanup
