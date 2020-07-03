@@ -54,6 +54,7 @@ CASKS=(
     mactex
     texmaker
     github
+    visual-studio-code
 )
 brew cask install ${CASKS[@]}
 
