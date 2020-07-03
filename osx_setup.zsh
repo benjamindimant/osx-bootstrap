@@ -38,6 +38,7 @@ fi
 echo "Creating .zshrc with git configs"
 if [ ! -s ~/.zshrc ]; then
     curl -fsSL https://raw.githubusercontent.com/benjamindimant/osx-terminal-config/master/.zshrc >> ~/.zshrc
+    compaudit | xargs chmod g-w
     echo "\n# git" >> ~/.zshrc
     echo "zstyle ':completion:*:*:git:*' script $(brew --prefix)/share/zsh/site-functions/git-completion.bash" >> ~/.zshrc
     echo "autoload -Uz compinit && compinit" >> ~/.zshrc
@@ -60,8 +61,7 @@ brew cask install ${CASKS[@]}
 
 echo "Set up vim..."
 if ! [ -s ~/.vimrc ]; then
-    curl -fsSL
-    https://raw.githubusercontent.com/benjamindimant/osx-bootstrap/master/.vimrc >> ~/.vimrc
+    curl -fsSL https://raw.githubusercontent.com/benjamindimant/osx-bootstrap/master/.vimrc >> ~/.vimrc
 fi
 
 echo "Installing pyenv..."
