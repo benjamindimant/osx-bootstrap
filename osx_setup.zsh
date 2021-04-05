@@ -24,7 +24,7 @@ xcode-select --install
 # Check for Homebrew, install if we don't have it
 if ! [ -x "$(command -v brew)" ]; then
     echo "Installing homebrew..."
-    yes '' | /bin/zsh -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Update homebrew recipes
@@ -38,7 +38,6 @@ fi
 echo "Creating .zshrc with git configs"
 if [ ! -s ~/.zshrc ]; then
     curl -fsSL https://raw.githubusercontent.com/benjamindimant/osx-terminal-config/master/.zshrc >> ~/.zshrc
-    compaudit | xargs chmod g-w
     echo "\n# git" >> ~/.zshrc
     echo "zstyle ':completion:*:*:git:*' script $(brew --prefix)/share/zsh/site-functions/git-completion.bash" >> ~/.zshrc
     echo "autoload -Uz compinit && compinit" >> ~/.zshrc
@@ -57,7 +56,7 @@ CASKS=(
     github
     visual-studio-code
 )
-brew cask install ${CASKS[@]}
+brew install ${CASKS[@]}
 
 echo "Set up vim..."
 if ! [ -s ~/.vimrc ]; then
@@ -89,5 +88,6 @@ echo "Creating folder structure..."
 echo "Cleaning up..."
 brew cleanup
 killall Finder
+compaudit | xargs chmod g-w # RUN AFTER SCRIPT IF IT DOESN'T WORK
 
 echo "Bootstrapping complete"
